@@ -1,4 +1,4 @@
-#include "staticlib.h"
+#include "dylib.h"
 #include <stdio.h>
 #include <stdlib.h>
 
