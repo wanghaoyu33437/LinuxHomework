@@ -1,7 +1,7 @@
 #include "my.h"
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_rwlock_t rwlock;
-
+//当开启线程互斥锁之后，文件读写锁不影响
 int g=0;
 
 void *fun(void *param)
@@ -11,6 +11,7 @@ void *fun(void *param)
 	for(i=0;i<LOOP;i++){
 		pthread_mutex_lock(&mutex);
 		g++;
+		//printf("thread %d is running,g == %d\n",(int) param,g);
 		pthread_mutex_unlock(&mutex);
 	}
 	pthread_rwlock_unlock(&rwlock);
@@ -32,7 +33,7 @@ int main()
 	pthread_rwlock_wrlock(&rwlock);
 	for(i=0;i<NUM;i++)
 	{
-		ret=pthread_create(&tid[i],NULL,fun,NULL);
+		ret=pthread_create(&tid[i],NULL,fun,(void*)i);
 		if(ret!=0)
 		{
 			perror("thread init failed!\n");
